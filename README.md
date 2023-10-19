@@ -1,4 +1,4 @@
-![CI](https://github.com/stewie1520/blog_ent/actions/workflows/go.yml/badge.svg)
+![CI](https://github.com/stewie1520/blog-ent/actions/workflows/go.yml/badge.svg)
 
 ## Getting Started 🎃
 
