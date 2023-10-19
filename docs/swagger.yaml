@@ -1,0 +1,308 @@
+basePath: /
+definitions:
+  api.LivenessResponse:
+    properties:
+      healthy:
+        type: boolean
+    type: object
+  api.ReadinessResponse:
+    properties:
+      database:
+        description: won't be shown if empty
+        type: string
+      healthy:
+        type: boolean
+    type: object
+  dao_post.Post:
+    properties:
+      content:
+        type: string
+      created_at:
+        $ref: '#/definitions/types.DateTime'
+      deleted_at:
+        $ref: '#/definitions/types.DateTime'
+      id:
+        type: string
+      updated_at:
+        $ref: '#/definitions/types.DateTime'
+      user_id:
+        type: string
+    type: object
+  post.CreatePostCommand:
+    properties:
+      content:
+        type: string
+    type: object
+  post.CreatePostResponse:
+    properties:
+      content:
+        type: string
+      created_at:
+        $ref: '#/definitions/types.DateTime'
+      deleted_at:
+        $ref: '#/definitions/types.DateTime'
+      id:
+        type: string
+      updated_at:
+        $ref: '#/definitions/types.DateTime'
+      user_id:
+        type: string
+    type: object
+  post.RemovePostResponse:
+    properties:
+      id:
+        type: string
+    type: object
+  post.UpdatePostCommand:
+    properties:
+      content:
+        type: string
+    type: object
+  post.UpdatePostResponse:
+    properties:
+      content:
+        type: string
+      created_at:
+        $ref: '#/definitions/types.DateTime'
+      deleted_at:
+        $ref: '#/definitions/types.DateTime'
+      id:
+        type: string
+      updated_at:
+        $ref: '#/definitions/types.DateTime'
+      user_id:
+        type: string
+    type: object
+  types.DateTime:
+    type: object
+  types.Pagination-dao_post_Post:
+    properties:
+      hasMore:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/dao_post.Post'
+        type: array
+      limit:
+        type: integer
+      offset:
+        type: integer
+      total:
+        type: integer
+    type: object
+  user.LoginCommand:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  user.RegisterCommand:
+    properties:
+      bio:
+        type: string
+      email:
+        type: string
+      fullName:
+        type: string
+      password:
+        type: string
+    type: object
+  user.TokensResponse:
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Blog API
+  version: "1.0"
+paths:
+  /health/live:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.LivenessResponse'
+      summary: Check if application is live
+      tags:
+      - health
+  /health/ready:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.ReadinessResponse'
+      summary: Check if application is ready to serve traffic
+      tags:
+      - health
+  /posts:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        maximum: 100
+        name: limit
+        type: integer
+      - in: query
+        minimum: 0
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Pagination-dao_post_Post'
+      security:
+      - Authorization: []
+      summary: List posts given user
+      tags:
+      - post
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/post.CreatePostCommand'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.CreatePostResponse'
+      security:
+      - Authorization: []
+      summary: Create new post
+      tags:
+      - post
+  /posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: post id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.RemovePostResponse'
+      security:
+      - Authorization: []
+      summary: remove a post
+      tags:
+      - post
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: post
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/post.UpdatePostCommand'
+      - description: post id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.UpdatePostResponse'
+      security:
+      - Authorization: []
+      summary: Update content of a post
+      tags:
+      - post
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login payload
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginCommand'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.TokensResponse'
+      summary: Login
+      tags:
+      - user
+  /users/me:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - Authorization: []
+      summary: Get current user
+      tags:
+      - user
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Register payload
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.RegisterCommand'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.TokensResponse'
+      summary: Register new user
+      tags:
+      - user
+securityDefinitions:
+  Authorization:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,19 @@
+# Refer from Uber style guide
+# https://github.com/uber-go/guide/blob/master/.golangci.yml
+
+run:
+  timeout: 5m
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    - errcheck
+    - goimports
+    - govet
+    - staticcheck
+    - errname
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
