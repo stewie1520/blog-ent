@@ -13,82 +13,73 @@ definitions:
       healthy:
         type: boolean
     type: object
-  dao_post.Post:
+  ent.Account:
     properties:
-      content:
-        type: string
       created_at:
-        $ref: '#/definitions/types.DateTime'
+        description: CreatedAt holds the value of the "created_at" field.
+        type: string
       deleted_at:
-        $ref: '#/definitions/types.DateTime'
+        description: DeletedAt holds the value of the "deleted_at" field.
+        type: string
+      edges:
+        allOf:
+        - $ref: '#/definitions/ent.AccountEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the AccountQuery when eager-loading is set.
+      email:
+        description: Email holds the value of the "email" field.
+        type: string
       id:
+        description: ID of the ent.
+        type: string
+      password:
+        description: Password holds the value of the "password" field.
         type: string
       updated_at:
-        $ref: '#/definitions/types.DateTime'
-      user_id:
+        description: UpdatedAt holds the value of the "updated_at" field.
         type: string
     type: object
-  post.CreatePostCommand:
+  ent.AccountEdges:
     properties:
-      content:
-        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/ent.User'
+        description: User holds the value of the user edge.
     type: object
-  post.CreatePostResponse:
+  ent.User:
     properties:
-      content:
+      bio:
+        description: Bio holds the value of the "bio" field.
         type: string
       created_at:
-        $ref: '#/definitions/types.DateTime'
+        description: CreatedAt holds the value of the "created_at" field.
+        type: string
       deleted_at:
-        $ref: '#/definitions/types.DateTime'
+        description: DeletedAt holds the value of the "deleted_at" field.
+        type: string
+      edges:
+        allOf:
+        - $ref: '#/definitions/ent.UserEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the UserQuery when eager-loading is set.
+      full_name:
+        description: FullName holds the value of the "full_name" field.
+        type: string
       id:
+        description: ID of the ent.
         type: string
       updated_at:
-        $ref: '#/definitions/types.DateTime'
-      user_id:
+        description: UpdatedAt holds the value of the "updated_at" field.
         type: string
     type: object
-  post.RemovePostResponse:
+  ent.UserEdges:
     properties:
-      id:
-        type: string
-    type: object
-  post.UpdatePostCommand:
-    properties:
-      content:
-        type: string
-    type: object
-  post.UpdatePostResponse:
-    properties:
-      content:
-        type: string
-      created_at:
-        $ref: '#/definitions/types.DateTime'
-      deleted_at:
-        $ref: '#/definitions/types.DateTime'
-      id:
-        type: string
-      updated_at:
-        $ref: '#/definitions/types.DateTime'
-      user_id:
-        type: string
-    type: object
-  types.DateTime:
-    type: object
-  types.Pagination-dao_post_Post:
-    properties:
-      hasMore:
-        type: boolean
-      items:
-        items:
-          $ref: '#/definitions/dao_post.Post'
-        type: array
-      limit:
-        type: integer
-      offset:
-        type: integer
-      total:
-        type: integer
+      account:
+        allOf:
+        - $ref: '#/definitions/ent.Account'
+        description: Account holds the value of the account edge.
     type: object
   user.LoginCommand:
     properties:
@@ -148,102 +139,6 @@ paths:
       summary: Check if application is ready to serve traffic
       tags:
       - health
-  /posts:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - in: query
-        maximum: 100
-        name: limit
-        type: integer
-      - in: query
-        minimum: 0
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/types.Pagination-dao_post_Post'
-      security:
-      - Authorization: []
-      summary: List posts given user
-      tags:
-      - post
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Create post payload
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/post.CreatePostCommand'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/post.CreatePostResponse'
-      security:
-      - Authorization: []
-      summary: Create new post
-      tags:
-      - post
-  /posts/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: post id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/post.RemovePostResponse'
-      security:
-      - Authorization: []
-      summary: remove a post
-      tags:
-      - post
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: post
-        in: body
-        name: post
-        required: true
-        schema:
-          $ref: '#/definitions/post.UpdatePostCommand'
-      - description: post id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/post.UpdatePostResponse'
-      security:
-      - Authorization: []
-      summary: Update content of a post
-      tags:
-      - post
   /users/login:
     post:
       consumes:
@@ -274,6 +169,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/ent.User'
       security:
       - Authorization: []
       summary: Get current user

@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"time"
 )
 
 // Account holds the schema definition for the Account entity.
@@ -18,8 +19,8 @@ func (Account) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Immutable().StructTag(`json:"id"`),
 		field.String("email").NotEmpty().StructTag(`json:"email"`).Unique(),
 		field.String("password").NotEmpty().StructTag(`json:"password"`),
-		field.Time("created_at").Immutable().Default("now()").StructTag(`json:"created_at"`),
-		field.Time("updated_at").Default("now()").UpdateDefault("now()").StructTag(`json:"updated_at"`),
+		field.Time("created_at").Immutable().Default(time.Now).StructTag(`json:"created_at"`),
+		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now).StructTag(`json:"updated_at"`),
 		field.Time("deleted_at").Optional().Nillable().StructTag(`json:"deleted_at"`),
 	}
 }

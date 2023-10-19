@@ -75,9 +75,9 @@ var (
 	// PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	PasswordValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
-	DefaultCreatedAt time.Time
+	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
-	DefaultUpdatedAt time.Time
+	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.

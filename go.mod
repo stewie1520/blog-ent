@@ -9,8 +9,6 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/jackc/pgx/v5 v5.4.3
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
-	github.com/lib/pq v1.10.9
-	github.com/spf13/cast v1.5.1
 	github.com/spf13/viper v1.16.0
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
@@ -45,6 +43,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
+	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect

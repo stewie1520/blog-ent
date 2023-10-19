@@ -7,6 +7,7 @@ import (
 	"github.com/stewie1520/blog_ent/api/middleware"
 	"github.com/stewie1520/blog_ent/api/response"
 	"github.com/stewie1520/blog_ent/core"
+	_ "github.com/stewie1520/blog_ent/ent"
 	"github.com/stewie1520/blog_ent/usecases"
 	usecases_user "github.com/stewie1520/blog_ent/usecases/user"
 )
@@ -88,7 +89,7 @@ func (api *userApi) login(c *gin.Context) {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Success 200
+// @Success 200 {object} ent.User
 // @Router /users/me [get]
 // @Security Authorization
 func (api *userApi) me(c *gin.Context) {

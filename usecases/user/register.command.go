@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+
 	"github.com/stewie1520/blog_ent/ent"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -56,15 +57,8 @@ func (cmd *RegisterCommand) Execute(ctx context.Context) (*TokensResponse, error
 
 	tx, err := cmd.app.Dao().BeginTx(ctx, nil)
 	if err != nil {
-		return nil, err
+		return rollback(tx, cmd.app, err)
 	}
-
-	defer func() {
-		err := tx.Rollback()
-		if err != nil {
-			cmd.app.Log().Info("Rollback error:", zap.Error(err))
-		}
-	}()
 
 	accountClientTx := tx.Account
 	userClientTx := tx.User
@@ -76,7 +70,7 @@ func (cmd *RegisterCommand) Execute(ctx context.Context) (*TokensResponse, error
 	dbAccount, err := dbAccountBuilder.Save(ctx)
 
 	if err != nil {
-		return nil, err
+		return rollback(tx, cmd.app, err)
 	}
 
 	dbUserBuilder := userClientTx.Create()
@@ -87,12 +81,12 @@ func (cmd *RegisterCommand) Execute(ctx context.Context) (*TokensResponse, error
 	dbUser, err := dbUserBuilder.Save(ctx)
 
 	if err != nil {
-		return nil, err
+		return rollback(tx, cmd.app, err)
 	}
 
 	err = tx.Commit()
 	if err != nil {
-		return nil, err
+		return rollback(tx, cmd.app, err)
 	}
 
 	return createTokens(cmd.app.Config(), dbUser.ID.String(), dbAccount.ID.String())
@@ -129,4 +123,13 @@ func createTokens(config *config.Config, userId string, accountId string) (*Toke
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
+}
+
+func rollback(tx *ent.Tx, app core.App, err error) (*TokensResponse, error) {
+	if rerr := tx.Rollback(); rerr != nil {
+		err = rerr
+		app.Log().Info("Rollback error:", zap.Error(rerr))
+	}
+
+	return nil, err
 }

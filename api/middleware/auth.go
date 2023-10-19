@@ -46,7 +46,7 @@ func LoadAuthContext(app core.App) gin.HandlerFunc {
 			return
 		}
 
-		c.Set(ContextUserKey, &user)
+		c.Set(ContextUserKey, user)
 	}
 }
 

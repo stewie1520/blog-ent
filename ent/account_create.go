@@ -145,11 +145,11 @@ func (ac *AccountCreate) ExecX(ctx context.Context) {
 // defaults sets the default values of the builder before save.
 func (ac *AccountCreate) defaults() {
 	if _, ok := ac.mutation.CreatedAt(); !ok {
-		v := account.DefaultCreatedAt
+		v := account.DefaultCreatedAt()
 		ac.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ac.mutation.UpdatedAt(); !ok {
-		v := account.DefaultUpdatedAt
+		v := account.DefaultUpdatedAt()
 		ac.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := ac.mutation.ID(); !ok {

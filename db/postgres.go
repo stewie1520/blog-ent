@@ -2,11 +2,12 @@ package db
 
 import (
 	"database/sql"
+
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/stewie1520/blog_ent/ent"
 
-	_ "github.com/lib/pq"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/stewie1520/blog_ent/log"
 )
 

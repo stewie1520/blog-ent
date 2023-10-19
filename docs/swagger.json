@@ -51,162 +51,6 @@
                 }
             }
         },
-        "/posts": {
-            "get": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "post"
-                ],
-                "summary": "List posts given user",
-                "parameters": [
-                    {
-                        "maximum": 100,
-                        "type": "integer",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "minimum": 0,
-                        "type": "integer",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/types.Pagination-dao_post_Post"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "post"
-                ],
-                "summary": "Create new post",
-                "parameters": [
-                    {
-                        "description": "Create post payload",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/post.CreatePostCommand"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/post.CreatePostResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/posts/{id}": {
-            "put": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "post"
-                ],
-                "summary": "Update content of a post",
-                "parameters": [
-                    {
-                        "description": "post",
-                        "name": "post",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/post.UpdatePostCommand"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "description": "post id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/post.UpdatePostResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "Authorization": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "post"
-                ],
-                "summary": "remove a post",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "post id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/post.RemovePostResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/users/login": {
             "post": {
                 "consumes": [
@@ -259,7 +103,10 @@
                 "summary": "Get current user",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.User"
+                        }
                     }
                 }
             }
@@ -319,122 +166,103 @@
                 }
             }
         },
-        "dao_post.Post": {
+        "ent.Account": {
             "type": "object",
             "properties": {
-                "content": {
+                "created_at": {
+                    "description": "CreatedAt holds the value of the \"created_at\" field.",
                     "type": "string"
                 },
-                "created_at": {
-                    "$ref": "#/definitions/types.DateTime"
-                },
                 "deleted_at": {
-                    "$ref": "#/definitions/types.DateTime"
+                    "description": "DeletedAt holds the value of the \"deleted_at\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the AccountQuery when eager-loading is set.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ent.AccountEdges"
+                        }
+                    ]
+                },
+                "email": {
+                    "description": "Email holds the value of the \"email\" field.",
+                    "type": "string"
                 },
                 "id": {
+                    "description": "ID of the ent.",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Password holds the value of the \"password\" field.",
                     "type": "string"
                 },
                 "updated_at": {
-                    "$ref": "#/definitions/types.DateTime"
-                },
-                "user_id": {
+                    "description": "UpdatedAt holds the value of the \"updated_at\" field.",
                     "type": "string"
                 }
             }
         },
-        "post.CreatePostCommand": {
+        "ent.AccountEdges": {
             "type": "object",
             "properties": {
-                "content": {
-                    "type": "string"
+                "user": {
+                    "description": "User holds the value of the user edge.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ent.User"
+                        }
+                    ]
                 }
             }
         },
-        "post.CreatePostResponse": {
+        "ent.User": {
             "type": "object",
             "properties": {
-                "content": {
+                "bio": {
+                    "description": "Bio holds the value of the \"bio\" field.",
                     "type": "string"
                 },
                 "created_at": {
-                    "$ref": "#/definitions/types.DateTime"
+                    "description": "CreatedAt holds the value of the \"created_at\" field.",
+                    "type": "string"
                 },
                 "deleted_at": {
-                    "$ref": "#/definitions/types.DateTime"
+                    "description": "DeletedAt holds the value of the \"deleted_at\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the UserQuery when eager-loading is set.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ent.UserEdges"
+                        }
+                    ]
+                },
+                "full_name": {
+                    "description": "FullName holds the value of the \"full_name\" field.",
+                    "type": "string"
                 },
                 "id": {
+                    "description": "ID of the ent.",
                     "type": "string"
                 },
                 "updated_at": {
-                    "$ref": "#/definitions/types.DateTime"
-                },
-                "user_id": {
+                    "description": "UpdatedAt holds the value of the \"updated_at\" field.",
                     "type": "string"
                 }
             }
         },
-        "post.RemovePostResponse": {
+        "ent.UserEdges": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
-        "post.UpdatePostCommand": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                }
-            }
-        },
-        "post.UpdatePostResponse": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "$ref": "#/definitions/types.DateTime"
-                },
-                "deleted_at": {
-                    "$ref": "#/definitions/types.DateTime"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "$ref": "#/definitions/types.DateTime"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "types.DateTime": {
-            "type": "object"
-        },
-        "types.Pagination-dao_post_Post": {
-            "type": "object",
-            "properties": {
-                "hasMore": {
-                    "type": "boolean"
-                },
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dao_post.Post"
-                    }
-                },
-                "limit": {
-                    "type": "integer"
-                },
-                "offset": {
-                    "type": "integer"
-                },
-                "total": {
-                    "type": "integer"
+                "account": {
+                    "description": "Account holds the value of the account edge.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ent.Account"
+                        }
+                    ]
                 }
             }
         },

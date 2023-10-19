@@ -28,21 +28,9 @@ debug: ### Debug the main app, you need to attach the client to port 2345
 watch: ### Run make build to build the binary file and run it, will restart on file change
 	air
 
-.PHONY: migrate-up
-migrate-up: ### Run the migration
-	migrate -database $(database) -path ./${MIGRATION_DIR_PATH} up
-
-.PHONY: migrate-down
-migrate-down: ### Revert the migration
-	migrate -database $(database) -path ./${MIGRATION_DIR_PATH} down $(step)
-
-.PHONY: migrate-gen
-migrate-gen: ### Generate a new migration file
-	migrate create -ext sql -dir ./${MIGRATION_DIR_PATH} -seq $(name)
-
-.PHONY: gen-sqlc
-gen-sqlc: ### Generate sqlc
-	sqlc generate
+.PHONY: gen-ent
+gen-ent: ### Generate ent
+	go generate ./ent
 
 .PHONY: gen-grpc
 gen-grpc: ### Generate grpc
@@ -64,7 +52,7 @@ gen-keys: ### Generate private key and public key
 
 bin-deps:
 	GOBIN=$(LOCAL_BIN) go install github.com/go-delve/delve/cmd/dlv@latest
-	GOBIN=$(LOCAL_BIN) go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+	curl -sSf https://atlasgo.sh | sh -s -- -b $(LOCAL_BIN)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(LOCAL_BIN) v1.54.2
 	GOBIN=$(LOCAL_BIN) go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 	curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(LOCAL_BIN)
