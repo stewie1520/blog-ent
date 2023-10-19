@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"errors"
 
 	"github.com/stewie1520/blog_ent/ent"
 	"github.com/stewie1520/blog_ent/ent/account"
@@ -10,7 +9,6 @@ import (
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
-	"github.com/jackc/pgx/v5"
 	"github.com/stewie1520/blog_ent/core"
 	"github.com/stewie1520/blog_ent/tools/securities"
 	"github.com/stewie1520/blog_ent/usecases"
@@ -49,7 +47,7 @@ func (cmd *LoginCommand) Execute(ctx context.Context) (*TokensResponse, error) {
 
 	dbAccount, err := cmd.accountClient.Query().Where(account.Email(cmd.Email)).First(ctx)
 
-	if errors.Is(err, pgx.ErrNoRows) {
+	if ent.IsNotFound(err) {
 		return nil, usecases.ErrInvalidCredentials
 	}
 
