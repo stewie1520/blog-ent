@@ -1,4 +1,4 @@
-![CI](https://github.com/stewie1520/blog/actions/workflows/go.yml/badge.svg)
+![CI](https://github.com/stewie1520/blog_ent/actions/workflows/go.yml/badge.svg)
 
 ## Getting Started 🎃
 
@@ -9,33 +9,21 @@ cp ./config.example.yaml ./config.yaml
 
 Make sure to update config.yaml with corresponding env from `docker-compose.yml`.
 
-## Debug
+## Debug 🐞
 
 ```sh
 make debug
 ```
 
-## Watch mode
+## Watch mode 👀
 
 ```sh
 make watch
 ```
 
-## Migration
+## Swagger 🧾
+http://localhost:8000/swagger/index.html
 
-To create a migration file, run
-```sh
-make migrate-gen name=<migration_file_name>
-```
+## Migration 💿
 
-To run migration
-```sh
-make migrate-up database="<database_url>"
-```
-
-To undo a migration
-```sh
-make migrate-down database="<database_url>" step=1
-```
-
-We're using [golang-migrate](github.com/golang-migrate/migrate) underlying, please go check their documentation.
+Please refer to [atlasgo.io](https://atlasgo.io/getting-started/) documentation and [ent migration](https://entgo.io/docs/data-migrations) documentation.
